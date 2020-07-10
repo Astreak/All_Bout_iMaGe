@@ -95,50 +95,7 @@ class Pintrest(object):
         raise("Probably you are trying to change the input cheack again")
         pass
 
-### Not Working
-class OverTheInternet(object):
-    def __init__(self,cat):
-        self.__category=cat
-        self.__data=None
-        self.L=[]
-        self.N=[]
-    
-    def _response(self):
-        self.response=requests.get(f"https://www.google.com/search?q={self.__category}+photos&client=firefox-b-d&sxsrf=ALeKk02KCXSm_mYBp2Tla9ytXVve2H_6fw:1594144168975&source=lnms&tbm=isch&sa=X&ved=2ahUKEwivgKbn2bvqAhUSg-YKHWG_AUIQ_AUoAXoECA4QAw");
-        if self.response.status_code!=200:
-            raise "Probably url is down oe the data is not working "
-        else:
-            self.__data=self.response.content
-    
-    def get_data(self):
-        soup=BeautifulSoup(self.__data,"html.parser");
-        for i in soup.find_all("img",class_="rg_i Q4LuWd"):
-            print(i)
-            self.L.append(i.get("src"));
-            self.N.append(i.get("alt"));
-            break
-    @property
-    def process_information_checked(self):
-        print("Ok before getting started you have a flag signal when you wanna stop press 1 else press 0/anynumber")
-        self._response
-        self.get_data
-        if "image" in os.listdir(os.getcwd()):
-            pass
-        else:
-            os.mkdir("image")
-        os.mkdir(os.path.join(os.getcwd(),"image",self.__category))
-        for i in range(len(self.L)):
-            IMG=requests.get(self.L[i]).content
-            F=self.N[i]+".jpg"
-            with open(os.path.join(os.getcwd(),"image",self.__category,F),"wb") as file:
-                file.write(IMG)
-            print(f"IMage {F} has been successfully uploaded");
-            
-    @process_information_checked.setter
-    def process_information_checked(self,D):
-        raise("Probably you are trying to change the input cheack again")
-        pass
-    
+
 class ImageFeatureDetection(object):
     def __init__(self):
         self.__matrix=None
@@ -183,13 +140,54 @@ class ImageFeatureDetection(object):
     def save_image(self,name,data):
         with open(name,"wb") as file:
             file.write(data)
+    
             
+
+
+
+
+
+
+
+
+
+
+
+
+### Not Working
+class TwitterApi(object):
+    def __init__(self,cat):
+        self.__category=cat
+        self.data=None
+        self.L=[]
+    def get_data(self):
+        self.data=requests.get("https://twitter.com/search?q={self.__category}&src=typed_query")
+        assert self.data.status_code==200
+    def process(self):
+        self.data=self.data.content
+        soup=BeautifulSoup(self.data,"html.parser")
+        for i in soup.find_all("div"):
+            pass
+        pass
+    
+            
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
         
 
 if __name__=="__main__":
-    I=ImageFeatureDetection()
-    data=I.get_data("A.jpg")
-    G=I.get_image_filter("gray")
-    G=I.get_thresholds(G,"G");
-    I.Show(G)
-        
+    T=TwitterApi("NiallOfficial")
+    T.get_data()
+    T.process()
