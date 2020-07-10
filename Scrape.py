@@ -6,6 +6,7 @@ import sys
 import threading
 import time
 import cv2
+from PIL import *
 
 class Unsplash(object):
     def __init__(self,cat):
@@ -146,7 +147,7 @@ class ImageFeatureDetection(object):
         return self.__matrix
     def get_image_filter(self,typeo=None):
         if(typeo=="gray"):
-            new_data=cv2.cvtColor(self.__matrix,cv2.COLOR_BGR2RGB)
+            new_data=cv2.cvtColor(self.__matrix,cv2.COLOR_BGR2GRAY)
         elif typeo=="HSV":
             new_data=cv2.cvtColor(self.__matrix,cv2.COLOR_BGR2HSV)
         return new_data
@@ -169,8 +170,9 @@ class ImageFeatureDetection(object):
         if typeo=="N":
             _,D=cv2.threshold(data,127,255,cv2.THRESH_BINARY)
         else:
-            #D=cv2.adaptiveThreshold(data,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+            D=cv2.adaptiveThreshold(data,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
         return D;
+     
     def Show(self,data=None):
         if data.all()!=None:
             cv2.imshow("image",data)
@@ -186,11 +188,8 @@ class ImageFeatureDetection(object):
 
 if __name__=="__main__":
     I=ImageFeatureDetection()
-    D=I.get_data("A.jpg")
+    data=I.get_data("A.jpg")
     G=I.get_image_filter("gray")
-    D=I.get_image_filter("HSV")
-    D=I.get_gradients(G,"Sobel",1)
-    D=I.get_thresholds(D,typeo="G")
-    I.save_image("Adaptive_thresholds.jpg",D)
-    I.Show(D)
+    G=I.get_thresholds(G,"G");
+    I.Show(G)
         
