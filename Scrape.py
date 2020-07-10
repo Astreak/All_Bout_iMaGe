@@ -7,6 +7,7 @@ import threading
 import time
 import cv2
 from PIL import *
+import html5lib
 
 class Unsplash(object):
     def __init__(self,cat):
@@ -142,33 +143,42 @@ class ImageFeatureDetection(object):
             file.write(data)
     
             
-
-
-
-
-
-
-
-
-
-
-
-
-### Not Working
-class TwitterApi(object):
+#collects data throughout the internet over legal terms
+class overTheInternet:
     def __init__(self,cat):
-        self.__category=cat
+        self.__category=cat;
         self.data=None
         self.L=[]
-    def get_data(self):
-        self.data=requests.get("https://twitter.com/search?q={self.__category}&src=typed_query")
+        self.ms=[]
+        
+    def get_data(self,f):
+        self.data=requests.get(f"https://www.google.com/search?q={self.__category}&sxsrf=ALeKk02323Baa1nSp6MrhW_cIsRC_udeSQ:1594409963156&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiSuuv7t8PqAhXU4HMBHSHuDx8Q_AUoAXoECBYQAw&biw=1731&bih=877&dpr=1.11")
         assert self.data.status_code==200
+        os.mkdir(self.__category);
+        
     def process(self):
         self.data=self.data.content
-        soup=BeautifulSoup(self.data,"html.parser")
-        for i in soup.find_all("div"):
-            pass
-        pass
+        soup=BeautifulSoup(self.data,"html5lib");
+        for i in soup.find_all("img"):
+            self.L.append(i.get("src"))
+        for j in soup.find_all("div",class_="PiLIec"):
+            print(j)
+        c=0
+        for i in self.L:
+            try:
+                D=requests.get(i).content
+                if c%2==0:
+                    with open(f"{self.__category}/{str(c)}.jpg","wb+") as file:
+                        file.write(D)
+                else:
+                    with open(f"{self.__category}/{str(c)}.png","wb+") as file:
+                        file.write(D)
+            except Exception as e:
+                    pass
+            c+=1
+        return self.ms
+                
+        
     
             
         
@@ -188,6 +198,8 @@ class TwitterApi(object):
         
 
 if __name__=="__main__":
-    T=TwitterApi("NiallOfficial")
-    T.get_data()
-    T.process()
+    I=overTheInternet("man")
+    I.get_data(1)
+    L=I.process()
+    print(L)
+   
