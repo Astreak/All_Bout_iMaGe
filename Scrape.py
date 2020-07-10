@@ -154,7 +154,10 @@ class overTheInternet:
     def get_data(self,f):
         self.data=requests.get(f"https://www.google.com/search?q={self.__category}&sxsrf=ALeKk02323Baa1nSp6MrhW_cIsRC_udeSQ:1594409963156&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiSuuv7t8PqAhXU4HMBHSHuDx8Q_AUoAXoECBYQAw&biw=1731&bih=877&dpr=1.11")
         assert self.data.status_code==200
-        os.mkdir(self.__category);
+        if os.path.isdir(self.__category):
+            raise "Directory Exists"
+        else:
+            os.mkdir(self.__category);
         
     def process(self):
         self.data=self.data.content
@@ -198,8 +201,8 @@ class overTheInternet:
         
 
 if __name__=="__main__":
-    I=overTheInternet("man")
+    I=overTheInternet("hack")
     I.get_data(1)
     L=I.process()
-    print(L)
+    
    
